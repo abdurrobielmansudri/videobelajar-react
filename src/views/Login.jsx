@@ -1,21 +1,33 @@
 // src/views/Login.jsx
 import React, { useState } from 'react';
-import InputField from '../ui/InputField'; // Memanggil komponen input buatanmu
+import InputField from '../ui/InputField';
+import { loginUser } from '../services/api'; // <--- 1. Import fungsi loginUser dari api.js
 
 function Login({ onNavigate }) {
-  // Tempat menyimpan data input email dan password
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // <--- Tambahan state loading agar interaktif
 
-  const handleLogin = (e) => {
-    e.preventDefault(); // Mencegah reload halaman
+  // 2. Ubah handleLogin menjadi async karena mengambil data dari API
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-    // Logika simulasi login sederhana
-    if (email === 'admin@gmail.com' && password === '123456') {
-      alert('Login Berhasil! Selamat datang.');
-      onNavigate('beranda'); // Jika benar, pindah ke Beranda
-    } else {
-      alert('Email atau kata sandi salah! (Tips coba gunakan: admin@gmail.com / 123456)');
+    try {
+      // Memanggil fungsi loginUser dari api.js untuk mencocokkan data ke MockAPI
+      const user = await loginUser(email, password);
+
+      if (user) {
+        alert(`Login Berhasil! Selamat datang, ${user.name || 'User'}.`);
+        onNavigate('beranda'); // Jika ditemukan/cocok, pindah ke halaman Beranda
+      } else {
+        alert('Email atau kata sandi salah! (Cek kembali data di MockAPI Anda).');
+      }
+    } catch (error) {
+      console.error('Terjadi kesalahan saat login:', error);
+      alert('Terjadi kesalahan pada server.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -33,7 +45,6 @@ function Login({ onNavigate }) {
         <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '20px' }}>Yuk, lanjutkan perkembangan keahlianmu hari ini</p>
         
         <form onSubmit={handleLogin}>
-          {/* Memakai komponen InputField kembali */}
           <InputField 
             label="E-mail" 
             type="email" 
@@ -53,7 +64,9 @@ function Login({ onNavigate }) {
             onChange={(e) => setPassword(e.target.value)} 
           />
           
-          <button type="submit" className="btn btn-primary" style={{ marginTop: '15px' }}>Masuk</button>
+          <button type="submit" className="btn btn-primary" style={{ marginTop: '15px' }} disabled={isLoading}>
+            {isLoading ? 'Memproses...' : 'Masuk'}
+          </button>
           <button type="button" className="btn btn-secondary" onClick={() => onNavigate('register')}>Belum Punya Akun? Daftar</button>
         </form>
       </div>

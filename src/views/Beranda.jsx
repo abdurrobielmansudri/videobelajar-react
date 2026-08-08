@@ -1,83 +1,21 @@
 // src/views/Beranda.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CourseCard from '../ui/CourseCard';
+import { getCourses } from '../services/api';
 
 function Beranda({ onNavigate }) {
-  // 1. Ubah coursesData menjadi state menggunakan useState
-  const [courses, setCourses] = useState([
-    {
-      id: 1,
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=500",
-      badge: "Pemasaran",
-      title: "Strategi Digital Marketing untuk Pemula",
-      mentor: "Andi Wijaya",
-      price: "Rp 149.000",
-      rating: "4.8 (120)"
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=500",
-      badge: "Desain",
-      title: "UI/UX Design Fundamental dengan Figma",
-      mentor: "Rian Setiawan",
-      price: "Rp 199.000",
-      rating: "4.9 (85)"
-    },
-    {
-      id: 3,
-      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500",
-      badge: "Bisnis",
-      title: "Cara Validasi Ide Bisnis & Manajemen Produk",
-      mentor: "Diana Putri",
-      price: "Rp 249.000",
-      rating: "4.7 (94)"
-    },
-    {
-      id: 4,
-      image: "https://images.unsplash.com/photo-1472289065668-ce650ac443d2?auto=format&fit=crop&w=500",
-      badge: "Pengembangan Diri",
-      title: "Manajemen Waktu & Produktivitas Kerja",
-      mentor: "Eko Prasetyo",
-      price: "Rp 99.000",
-      rating: "4.6 (210)"
-    },
-    {
-      id: 5,
-      image: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=500",
-      badge: "Pemasaran",
-      title: "Copywriting Tradisional vs AI Digital Copy",
-      mentor: "Sinta Bella",
-      price: "Rp 129.000",
-      rating: "4.8 (67)"
-    },
-    {
-      id: 6,
-      image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=500",
-      badge: "Desain",
-      title: "Panduan Membuat Design System yang Konsisten",
-      mentor: "Kevin Sanjaya",
-      price: "Rp 219.000",
-      rating: "4.9 (43)"
-    },
-    {
-      id: 7,
-      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=500",
-      badge: "Bisnis",
-      title: "Strategi Scaling Up untuk Bisnis UMKM",
-      mentor: "Denny Wahyudi",
-      price: "Rp 189.000",
-      rating: "4.5 (88)"
-    },
-    {
-      id: 8,
-      image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=500",
-      badge: "Pengembangan Diri",
-      title: "Public Speaking & Teknik Presentasi Memukau",
-      mentor: "Citra Kirana",
-      price: "Rp 159.000",
-      rating: "4.7 (154)"
-    }
-  ]);
+  // 1. Ubah nilai awal courses menjadi array kosong karena datanya akan diambil dari API
+  const [courses, setCourses] = useState([]);
+
+  // 2. Gunakan useEffect untuk mengambil data dari MockAPI saat halaman pertama kali dibuka
+  useEffect(() => {
+    const fetchCoursesData = async () => {
+      const data = await getCourses();
+      setCourses(data);
+    };
+
+    fetchCoursesData();
+  }, []);
 
   // State untuk form input (Create & Update)
   const [formData, setFormData] = useState({
@@ -188,7 +126,7 @@ function Beranda({ onNavigate }) {
                 value={formData.title} 
                 onChange={handleChange} 
                 required 
-                style={{ padding: '10px', borderRadius: '6px', bordergi: '1px solid #cbd5e1' }}
+                style={{ padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
               />
               <input 
                 type="text" 

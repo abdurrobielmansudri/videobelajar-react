@@ -1,7 +1,7 @@
-// src/ui/CourseCard.jsx
+
 import React from 'react';
 
-// Cetakan kartu yang menerima data dinamis lewat Props
+
 function CourseCard({ image, badge, title, mentor, price, rating }) {
   return (
     <div className="course-card">
